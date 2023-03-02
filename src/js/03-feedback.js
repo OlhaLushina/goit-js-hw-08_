@@ -7,6 +7,8 @@ const refs = {
 }
 
 let formData = {};
+// Ключ для локального сховища
+const STORAGE_KEY = "feedback-form-state"; 
 
 refs.form.addEventListener('submit', onFormSubmit);
 refs.form.addEventListener('input', throttle(onFormInput, 500));
@@ -23,7 +25,7 @@ function onFormSubmit(e) {
     e.currentTarget.reset(); 
 
     // Очищуємо локальне сховище
-    localStorage.setItem("feedback-form-state", "");
+    localStorage.removeItem(STORAGE_KEY);
 
     // Виводимо поточне значення полів форми
     console.log(formData);
@@ -38,14 +40,14 @@ function onFormInput(e) {
     formData[e.target.name] = e.target.value;
 
     // Записуємо значення полів форми у локальне сховище
-    localStorage.setItem("feedback-form-state", JSON.stringify(formData));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
 }
 
 // Завантаження сторінки
 function loadPage() {
     // Отримуємо дані з локального сховища
     try {
-        formData = JSON.parse(localStorage.getItem("feedback-form-state"));
+        formData = JSON.parse(localStorage.getItem(STORAGE_KEY));
 
         // Якщо в локальному сховищі є значення email, то заповнюємо його
         if (formData.email) {
